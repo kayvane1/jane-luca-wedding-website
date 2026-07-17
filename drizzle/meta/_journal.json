@@ -8,6 +8,13 @@
       "when": 1784300315667,
       "tag": "0000_ambiguous_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784302316421,
+      "tag": "0001_romantic_kabuki",
+      "breakpoints": true
     }
   ]
 }
