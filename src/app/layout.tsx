@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Jane & Luca — Corsica 2027",
+  title: "Jane & Luca — A Wedding in Corsica",
   description: "Join Jane and Luca for a Mediterranean wedding weekend in Corsica.",
   icons: { icon: "/assets/jl-monogram.png" },
 };
