@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const links = [
   ["Information", "#information"],
@@ -12,9 +12,38 @@ const links = [
 
 export function SiteNavigation() {
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateVisibility = () => {
+      animationFrame = 0;
+      const information = document.getElementById("information");
+      setVisible(Boolean(information && information.getBoundingClientRect().top <= 72));
+    };
+
+    const queueVisibilityUpdate = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(updateVisibility);
+    };
+
+    window.addEventListener("scroll", queueVisibilityUpdate, { passive: true });
+    window.addEventListener("resize", queueVisibilityUpdate);
+    updateVisibility();
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", queueVisibilityUpdate);
+      window.removeEventListener("resize", queueVisibilityUpdate);
+    };
+  }, []);
 
   return (
-    <header className="site-header">
+    <header
+      className={visible ? "site-header is-visible" : "site-header"}
+      aria-hidden={!visible}
+      inert={!visible}
+    >
       <a className="wordmark" href="#home" aria-label="Jane and Luca, home">
         J<span>&amp;</span>L
       </a>

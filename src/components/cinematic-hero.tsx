@@ -102,8 +102,8 @@ export function CinematicHero() {
           <iframe
             ref={youtubeRef}
             className="cinematic-hero__youtube"
-            src="https://www.youtube-nocookie.com/embed/lvukW3m28qA?autoplay=1&mute=1&controls=0&disablekb=1&enablejsapi=1&fs=0&iv_load_policy=3&loop=1&modestbranding=1&playlist=lvukW3m28qA&playsinline=1&rel=0"
-            title="Lumio and the village of Occi, filmed by TheCorsicanDroner"
+            src="https://www.youtube-nocookie.com/embed/lvukW3m28qA?autoplay=1&mute=1&controls=0&disablekb=1&enablejsapi=1&end=30&fs=0&iv_load_policy=3&loop=1&modestbranding=1&playlist=lvukW3m28qA&playsinline=1&rel=0&start=5"
+            title="Cinematic aerial landscape background"
             allow="autoplay; encrypted-media; picture-in-picture"
             loading="eager"
             tabIndex={-1}
@@ -118,10 +118,6 @@ export function CinematicHero() {
         <div className="cinematic-hero__scene cinematic-hero__scene--opening">
           <p>A weekend in the Balagne</p>
           <h1>Jane <i>&amp;</i> Luca</h1>
-          <div className="cinematic-hero__credit">
-            <span>Le Rocher · Lumio</span>
-            <span>Film · The Corsican Droner</span>
-          </div>
         </div>
 
         <div className="cinematic-hero__scene cinematic-hero__scene--rocher" aria-hidden="true">

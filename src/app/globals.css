@@ -25,7 +25,8 @@ a { color: inherit; }
 address { font-style: normal; }
 ::selection { color: var(--ink); background: var(--sun); }
 
-.site-header { position: fixed; z-index: 30; inset: 0 0 auto; height: 4.5rem; padding: 0 3vw; display: flex; align-items: center; justify-content: space-between; color: var(--ink); background: color-mix(in srgb, var(--paper) 92%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); backdrop-filter: blur(12px); }
+.site-header { position: fixed; z-index: 30; inset: 0 0 auto; height: 4.5rem; padding: 0 3vw; display: flex; align-items: center; justify-content: space-between; color: var(--ink); background: color-mix(in srgb, var(--paper) 92%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); opacity: 0; pointer-events: none; transform: translateY(-105%); backdrop-filter: blur(12px); transition: opacity 320ms var(--ease-out), transform 520ms var(--ease-out); }
+.site-header.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .wordmark { color: var(--orange); font-family: var(--display); font-size: 1.5rem; font-weight: 600; letter-spacing: -.12em; text-decoration: none; }
 .wordmark span { font-style: italic; font-weight: 400; }
 .site-nav { display: flex; align-items: center; gap: clamp(1.1rem, 2.8vw, 3.2rem); }
@@ -55,7 +56,6 @@ address { font-style: normal; }
 .cinematic-hero__scene--rocher h2 { position: absolute; left: 5vw; bottom: 16vh; max-width: 85vw; font-size: clamp(5.2rem, 13vw, 13rem); }
 .cinematic-hero__scene--rocher h2 i { color: var(--sun); font-weight: 400; }
 .cinematic-hero__aside { position: absolute; right: 2.2rem; top: 50%; color: var(--paper); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; transform: rotate(90deg) translateX(50%); transform-origin: right center; }
-.cinematic-hero__credit { position: absolute; inset: auto 5vw 5rem; display: flex; justify-content: space-between; gap: 2rem; color: var(--paper); font-size: .66rem; letter-spacing: .11em; text-transform: uppercase; }
 .cinematic-hero__progress { position: absolute; z-index: 3; inset: auto 5vw 1.5rem; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; color: var(--paper); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; }
 .cinematic-hero__progress i { height: 1px; overflow: hidden; background: rgba(245, 240, 230, .4); }
 .cinematic-hero__progress b { display: block; width: calc(var(--hero-progress) * 100%); height: 100%; background: var(--sun); }
@@ -186,8 +186,6 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
   .cinematic-hero__scene h1 { top: 35%; font-size: clamp(4.7rem, 23vw, 7rem); line-height: .78; }
   .cinematic-hero__scene--rocher h2 { left: 1.5rem; bottom: 18vh; max-width: calc(100vw - 3rem); font-size: clamp(4.6rem, 22vw, 7rem); }
   .cinematic-hero__aside { display: none; }
-  .cinematic-hero__credit { inset: auto 1.5rem 5.2rem; flex-direction: column; gap: .45rem; }
-  .cinematic-hero__credit span:last-child { align-self: flex-end; }
   .cinematic-hero__progress { inset: auto 1.5rem 1.5rem; }
   .section-intro, .info-panel, .rsvp-section, .story, .faq { padding: 7rem 1.5rem; grid-template-columns: 1fr; gap: 4rem; }
   .section-intro { min-height: 80vh; }
