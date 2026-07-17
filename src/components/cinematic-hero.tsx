@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 export function CinematicHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const youtubeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -14,6 +15,14 @@ export function CinematicHero() {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let animationFrame = 0;
+
+    const controlYouTube = (command: "playVideo" | "pauseVideo") => {
+      youtubeRef.current?.contentWindow?.postMessage(JSON.stringify({
+        event: "command",
+        func: command,
+        args: [],
+      }), "https://www.youtube-nocookie.com");
+    };
 
     const updateProgress = () => {
       animationFrame = 0;
@@ -31,16 +40,20 @@ export function CinematicHero() {
     const visibilityObserver = new IntersectionObserver(([entry]) => {
       if (reducedMotion.matches || !entry.isIntersecting) {
         video.pause();
+        controlYouTube("pauseVideo");
       } else {
         void video.play().catch(() => undefined);
+        controlYouTube("playVideo");
       }
     }, { threshold: 0.05 });
 
     const handleMotionPreference = () => {
       if (reducedMotion.matches) {
         video.pause();
+        controlYouTube("pauseVideo");
       } else if (section.getBoundingClientRect().bottom > 0) {
         void video.play().catch(() => undefined);
+        controlYouTube("playVideo");
       }
     };
 
@@ -86,6 +99,19 @@ export function CinematicHero() {
           >
             <source src="/assets/jane-luca-cinematic-reel.mp4" type="video/mp4" />
           </video>
+          <iframe
+            ref={youtubeRef}
+            className="cinematic-hero__youtube"
+            src="https://www.youtube-nocookie.com/embed/lvukW3m28qA?autoplay=1&mute=1&controls=0&disablekb=1&enablejsapi=1&fs=0&iv_load_policy=3&loop=1&modestbranding=1&playlist=lvukW3m28qA&playsinline=1&rel=0"
+            title="Lumio and the village of Occi, filmed by TheCorsicanDroner"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            loading="eager"
+            tabIndex={-1}
+            aria-hidden="true"
+            onLoad={(event) => {
+              event.currentTarget.parentElement?.setAttribute("data-youtube-ready", "true");
+            }}
+          />
           <div className="cinematic-hero__grade" aria-hidden="true" />
         </div>
 
@@ -94,7 +120,7 @@ export function CinematicHero() {
           <h1>Jane <i>&amp;</i> Luca</h1>
           <div className="cinematic-hero__credit">
             <span>Le Rocher · Lumio</span>
-            <span>Dates to be announced</span>
+            <span>Film · The Corsican Droner</span>
           </div>
         </div>
 
