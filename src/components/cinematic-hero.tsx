@@ -7,14 +7,15 @@ const SEGMENT_START = 6;
 const SEGMENT_END = 30;
 
 interface YouTubePlayer {
-  cueVideoById(options: { videoId: string; startSeconds: number; endSeconds: number }): void;
+  cueVideoById(videoId: string, startSeconds?: number): void;
   destroy(): void;
   getCurrentTime(): number;
   getPlayerState(): number;
-  loadVideoById(options: { videoId: string; startSeconds: number; endSeconds: number }): void;
+  loadVideoById(videoId: string, startSeconds?: number): void;
   mute(): void;
   pauseVideo(): void;
   playVideo(): void;
+  seekTo(seconds: number, allowSeekAhead: boolean): void;
 }
 
 interface YouTubeApi {
@@ -91,16 +92,10 @@ export function CinematicHero() {
     const loadSegment = (shouldPlay = true) => {
       if (!player) return;
 
-      const options = {
-        videoId: LUMIO_VIDEO_ID,
-        startSeconds: SEGMENT_START,
-        endSeconds: SEGMENT_END,
-      };
-
       if (shouldPlay && heroVisible && !reducedMotion.matches) {
-        player.loadVideoById(options);
+        player.loadVideoById(LUMIO_VIDEO_ID, SEGMENT_START);
       } else {
-        player.cueVideoById(options);
+        player.cueVideoById(LUMIO_VIDEO_ID, SEGMENT_START);
         player.pauseVideo();
       }
     };
@@ -108,7 +103,13 @@ export function CinematicHero() {
     const restartSegment = () => {
       segmentLoops += 1;
       section.dataset.segmentLoops = String(segmentLoops);
-      loadSegment();
+      section.dataset.videoTime = SEGMENT_START.toFixed(2);
+      player?.seekTo(SEGMENT_START, true);
+      if (heroVisible && !reducedMotion.matches) {
+        player?.playVideo();
+      } else {
+        player?.pauseVideo();
+      }
     };
 
     const enforceSegment = () => {
@@ -117,6 +118,9 @@ export function CinematicHero() {
 
       const currentTime = player.getCurrentTime();
       section.dataset.videoTime = currentTime.toFixed(2);
+      if (currentTime >= SEGMENT_START + 2.5) {
+        section.querySelector(".cinematic-hero__film")?.setAttribute("data-youtube-ui-safe", "true");
+      }
       if (
         (currentTime > 0.5 && currentTime < SEGMENT_START - 0.2)
         || currentTime >= SEGMENT_END - 0.75
@@ -204,9 +208,14 @@ export function CinematicHero() {
                 return;
               }
               section.querySelector(".cinematic-hero__film")?.setAttribute("data-youtube-ready", "true");
+              if (currentTime >= SEGMENT_START + 2.5) {
+                section.querySelector(".cinematic-hero__film")?.setAttribute("data-youtube-ui-safe", "true");
+              }
               enforceSegment();
             } else if (event.data === api.PlayerState.ENDED) {
-              restartSegment();
+              segmentLoops += 1;
+              section.dataset.segmentLoops = String(segmentLoops);
+              loadSegment();
             }
           },
         },
