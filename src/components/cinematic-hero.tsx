@@ -11,6 +11,7 @@ export function CinematicHero() {
   const lightRef = useRef<HTMLDivElement>(null);
   const openingRef = useRef<HTMLDivElement>(null);
   const invitationRef = useRef<HTMLDivElement>(null);
+  const dateRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLElement>(null);
   const [playbackBlocked, setPlaybackBlocked] = useState(false);
@@ -22,6 +23,7 @@ export function CinematicHero() {
     const light = lightRef.current;
     const opening = openingRef.current;
     const invitation = invitationRef.current;
+    const date = dateRef.current;
     const progressIndicator = progressRef.current;
     const progressBar = progressBarRef.current;
 
@@ -32,6 +34,7 @@ export function CinematicHero() {
       || !light
       || !opening
       || !invitation
+      || !date
       || !progressIndicator
       || !progressBar
     ) return;
@@ -39,9 +42,12 @@ export function CinematicHero() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktopHero = window.matchMedia("(min-width: 821px)");
     let animationFrame = 0;
+    let playbackFailureTimer = 0;
 
-    const markVideoReady = () => {
-      video.parentElement?.setAttribute("data-video-ready", "true");
+    const markVideoPlaying = () => {
+      window.clearTimeout(playbackFailureTimer);
+      video.parentElement?.setAttribute("data-video-playing", "true");
+      setPlaybackBlocked(false);
     };
 
     const startVideo = () => {
@@ -50,10 +56,25 @@ export function CinematicHero() {
       const playback = video.play();
       if (playback) {
         void playback
-          .then(() => setPlaybackBlocked(false))
-          .catch(() => setPlaybackBlocked(true));
+          .then(markVideoPlaying)
+          .catch(() => {
+            window.clearTimeout(playbackFailureTimer);
+            playbackFailureTimer = window.setTimeout(() => {
+              if (
+                video.paused
+                && section.getBoundingClientRect().bottom > 0
+              ) {
+                setPlaybackBlocked(true);
+              }
+            }, 500);
+          });
       }
     };
+
+    const clamp = (value: number) => Math.min(1, Math.max(0, value));
+    const mapProgress = (progress: number, start: number, end: number) => (
+      clamp((progress - start) / (end - start))
+    );
 
     const updateProgress = () => {
       animationFrame = 0;
@@ -61,21 +82,43 @@ export function CinematicHero() {
       // `innerHeight` changes as mobile browser chrome collapses. The sticky
       // stage uses `svh`, so measure against that stable element instead.
       const travel = Math.max(section.offsetHeight - stage.offsetHeight, 1);
-      const progress = Math.min(1, Math.max(0, -bounds.top / travel));
-      const openingExit = Math.min(1, Math.max(0, (progress - 0.08) / 0.28));
-      const invitationEnter = Math.min(1, Math.max(0, (progress - 0.24) / 0.28));
+      const progress = clamp(-bounds.top / travel);
+      const isDesktop = desktopHero.matches;
+      const reduceMovement = reducedMotion.matches;
+      const openingExit = isDesktop
+        ? mapProgress(progress, 0.08, 0.36)
+        : mapProgress(progress, 0.14, 0.29);
+      const invitationEnter = isDesktop
+        ? mapProgress(progress, 0.24, 0.52)
+        : mapProgress(progress, 0.25, 0.4);
+      const invitationExit = isDesktop ? 0 : mapProgress(progress, 0.94, 1);
+      const dateEnter = isDesktop
+        ? invitationEnter
+        : mapProgress(progress, 0.56, 0.69);
+      const dateExit = isDesktop ? 0 : mapProgress(progress, 0.94, 1);
       const invitationEase = 1 - Math.pow(1 - invitationEnter, 3);
-      const promptExit = Math.min(1, Math.max(0, (progress - 0.84) / 0.16));
+      const dateEase = 1 - Math.pow(1 - dateEnter, 3);
+      const promptExit = mapProgress(progress, 0.84, 1);
 
       opening.style.opacity = (1 - openingExit).toFixed(4);
-      opening.style.transform = `translate3d(0, ${(-3.5 * openingExit).toFixed(3)}rem, 0)`;
-      invitation.style.opacity = invitationEnter.toFixed(4);
-      invitation.style.transform = `translate3d(0, ${((1 - invitationEase) * 3.5).toFixed(3)}rem, 0)`;
-      light.style.transform = `translate3d(${((progress - 0.5) * 42).toFixed(3)}vw, 0, 0)`;
+      opening.style.transform = reduceMovement
+        ? "none"
+        : `translate3d(0, ${(-3.5 * openingExit).toFixed(3)}rem, 0)`;
+      invitation.style.opacity = (invitationEnter * (1 - invitationExit)).toFixed(4);
+      invitation.style.transform = reduceMovement
+        ? "none"
+        : `translate3d(0, ${((1 - invitationEase) * 3.5).toFixed(3)}rem, 0)`;
+      date.style.opacity = (dateEnter * (1 - dateExit)).toFixed(4);
+      date.style.transform = reduceMovement
+        ? "none"
+        : `translate3d(0, ${((1 - dateEase) * 2.25).toFixed(3)}rem, 0)`;
+      light.style.transform = reduceMovement
+        ? "translate3d(-21vw, 0, 0)"
+        : `translate3d(${((progress - 0.5) * 42).toFixed(3)}vw, 0, 0)`;
       progressBar.style.transform = `scaleX(${progress.toFixed(4)})`;
       progressIndicator.style.opacity = (1 - promptExit).toFixed(4);
 
-      if (desktopHero.matches) {
+      if (desktopHero.matches && !reduceMovement) {
         video.style.transform = `scale(${(1.015 + progress * 0.07).toFixed(4)})`;
       } else {
         video.style.transform = "none";
@@ -87,28 +130,34 @@ export function CinematicHero() {
     };
 
     const visibilityObserver = new IntersectionObserver(([entry]) => {
-      if (reducedMotion.matches || !entry.isIntersecting) {
+      if (!entry.isIntersecting) {
         video.pause();
-        if (reducedMotion.matches) setPlaybackBlocked(false);
       } else {
         startVideo();
       }
     }, { threshold: 0.05 });
 
     const handleMotionPreference = () => {
-      if (reducedMotion.matches) {
-        video.pause();
-        setPlaybackBlocked(false);
-      } else if (section.getBoundingClientRect().bottom > 0) {
+      if (section.getBoundingClientRect().bottom > 0) {
         startVideo();
       }
+      queueProgressUpdate();
     };
 
     const handleFirstGesture = () => {
       if (
-        !reducedMotion.matches
-        && video.paused
+        video.paused
         && section.getBoundingClientRect().bottom > 0
+      ) {
+        startVideo();
+      }
+    };
+
+    const handleCanPlay = () => {
+      const bounds = section.getBoundingClientRect();
+      if (
+        bounds.bottom > 0
+        && bounds.top < window.innerHeight
       ) {
         startVideo();
       }
@@ -117,21 +166,26 @@ export function CinematicHero() {
     video.muted = true;
     video.defaultMuted = true;
     video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
     visibilityObserver.observe(section);
-    video.addEventListener("loadeddata", markVideoReady);
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("playing", markVideoPlaying);
     window.addEventListener("touchstart", handleFirstGesture, { passive: true });
     window.addEventListener("pointerdown", handleFirstGesture, { passive: true });
     window.addEventListener("scroll", queueProgressUpdate, { passive: true });
     window.addEventListener("resize", queueProgressUpdate);
     desktopHero.addEventListener("change", queueProgressUpdate);
     reducedMotion.addEventListener("change", handleMotionPreference);
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) markVideoReady();
     updateProgress();
+    startVideo();
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(playbackFailureTimer);
       visibilityObserver.disconnect();
-      video.removeEventListener("loadeddata", markVideoReady);
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("playing", markVideoPlaying);
       window.removeEventListener("touchstart", handleFirstGesture);
       window.removeEventListener("pointerdown", handleFirstGesture);
       window.removeEventListener("scroll", queueProgressUpdate);
@@ -152,12 +206,14 @@ export function CinematicHero() {
             muted
             loop
             playsInline
+            controls={false}
+            disablePictureInPicture
             preload="auto"
-            poster="/assets/lumio-drone-first-frame.jpg"
             tabIndex={-1}
           >
             <source src={LUMIO_CLIP} type="video/mp4" />
           </video>
+          <div className="cinematic-hero__poster" />
           <div className="cinematic-hero__grade" />
           <div className="cinematic-hero__light" ref={lightRef} />
         </div>
@@ -174,6 +230,12 @@ export function CinematicHero() {
           ref={invitationRef}
         >
           <h2>Come celebrate<br /><i>with us in Corsica</i></h2>
+        </div>
+
+        <div
+          className="cinematic-hero__scene cinematic-hero__scene--date"
+          ref={dateRef}
+        >
           <p className="cinematic-hero__date">10 July 2027</p>
         </div>
 

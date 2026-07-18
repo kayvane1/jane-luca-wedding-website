@@ -37,10 +37,11 @@ address { font-style: normal; }
 
 .cinematic-hero { position: relative; z-index: 1; height: 205svh; background: var(--ink); }
 .cinematic-hero__stage { position: sticky; top: 0; height: 100svh; min-height: 38rem; overflow: hidden; color: var(--paper-light); background: var(--ink); }
-.cinematic-hero__film, .cinematic-hero__grade, .cinematic-hero__light { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cinematic-hero__film, .cinematic-hero__poster, .cinematic-hero__grade, .cinematic-hero__light { position: absolute; inset: 0; width: 100%; height: 100%; }
 .cinematic-hero__film { overflow: hidden; background: var(--ink) url("/assets/lumio-drone-first-frame.jpg") center / cover no-repeat; }
-.cinematic-hero__video { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; transform: scale(1.015); transition: opacity 420ms var(--ease-out); will-change: transform; }
-.cinematic-hero__film[data-video-ready="true"] .cinematic-hero__video { opacity: 1; }
+.cinematic-hero__video { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transform: scale(1.015); will-change: transform; }
+.cinematic-hero__poster { z-index: 2; pointer-events: none; background: url("/assets/lumio-drone-first-frame.jpg") center / cover no-repeat; transition: opacity 420ms var(--ease-out); }
+.cinematic-hero__film[data-video-playing="true"] .cinematic-hero__poster { opacity: 0; }
 .cinematic-hero__grade { z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(7, 23, 46, .24), rgba(7, 23, 46, .02) 36%, rgba(7, 23, 46, .68) 100%); }
 .cinematic-hero__light { z-index: 2; opacity: .18; pointer-events: none; background: linear-gradient(90deg, transparent 49.8%, rgba(253, 187, 2, .34) 50%, transparent 50.2%); transform: translate3d(-21vw, 0, 0); will-change: transform; }
 .cinematic-hero__scene { position: absolute; z-index: 2; inset: 4.5rem 0 0; pointer-events: none; }
@@ -51,7 +52,7 @@ address { font-style: normal; }
 .cinematic-hero__scene h2 i { color: var(--sun); font-weight: 400; }
 .cinematic-hero__date { position: absolute; top: 70%; left: 50%; margin: 0; color: var(--paper-light); font-size: clamp(.68rem, 1vw, .82rem); letter-spacing: .18em; text-transform: uppercase; transform: translateX(-50%); }
 .cinematic-hero__scene--opening { opacity: 1; transform: translate3d(0, 0, 0); will-change: transform, opacity; }
-.cinematic-hero__scene--invitation { opacity: 0; transform: translate3d(0, 3.5rem, 0); will-change: transform, opacity; }
+.cinematic-hero__scene--invitation, .cinematic-hero__scene--date { opacity: 0; transform: translate3d(0, 3.5rem, 0); will-change: transform, opacity; }
 .cinematic-hero__play { position: absolute; z-index: 4; left: 50%; bottom: 4.25rem; padding: .7rem 1.15rem; color: var(--paper-light); background: rgba(7, 23, 46, .7); border: 1px solid rgba(255, 253, 247, .7); border-radius: 999px; font-family: var(--sans); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transform: translateX(-50%); backdrop-filter: blur(.5rem); transition: transform 140ms var(--ease-out); }
 .cinematic-hero__play:active { transform: translateX(-50%) scale(.97); }
 .cinematic-hero__play:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; }
@@ -202,7 +203,7 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
   .site-nav { position: fixed; inset: 4.5rem 0 auto; padding: 2rem; display: grid; gap: 1.5rem; background: var(--paper); border-bottom: 1px solid var(--accent); transform: translateY(-120%); opacity: 0; pointer-events: none; transition: transform 180ms var(--ease-out), opacity 140ms var(--ease-out); }
   .site-nav.is-open { transform: translateY(0); opacity: 1; pointer-events: auto; transition-duration: 240ms, 180ms; }
   .site-nav a { font-size: 1.8rem; text-transform: none; }
-  .cinematic-hero { height: 220svh; }
+  .cinematic-hero { height: 430svh; }
   .cinematic-hero__stage { min-height: 0; }
   .cinematic-hero__scene h1 { top: 41%; font-size: clamp(4.7rem, 23vw, 7rem); line-height: .78; }
   .cinematic-hero__scene h2 { top: 46%; width: calc(100% - 2rem); font-size: clamp(3.5rem, 17vw, 5.8rem); line-height: .84; }
@@ -257,8 +258,6 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .cinematic-hero { height: 100svh; }
-  .cinematic-hero__scene--opening { opacity: 1; transform: none; }
   .reveal { opacity: 1; transform: none; }
   .reveal--wipe::after { display: none; }
 }
