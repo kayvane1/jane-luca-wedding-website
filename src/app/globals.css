@@ -51,6 +51,8 @@ address { font-style: normal; }
 .cinematic-hero__date { position: absolute; top: 70%; left: 50%; margin: 0; color: var(--paper-light); font-size: clamp(.68rem, 1vw, .82rem); letter-spacing: .18em; text-transform: uppercase; transform: translateX(-50%); }
 .cinematic-hero__scene--opening { opacity: clamp(0, calc(1.4 - var(--hero-progress) * 3.4), 1); transform: translateY(calc(var(--hero-progress) * -6rem)); }
 .cinematic-hero__scene--invitation { opacity: clamp(0, calc((var(--hero-progress) - .12) * 3.4), 1); transform: translateY(calc((1 - var(--hero-progress)) * 5rem)); }
+.cinematic-hero__play { position: absolute; z-index: 4; left: 50%; bottom: 4.25rem; padding: .7rem 1.15rem; color: var(--paper-light); background: rgba(7, 23, 46, .7); border: 1px solid rgba(255, 253, 247, .7); border-radius: 999px; font-family: var(--sans); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transform: translateX(-50%); backdrop-filter: blur(.5rem); }
+.cinematic-hero__play:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; }
 .cinematic-hero__progress { position: absolute; z-index: 3; inset: auto 5vw 1.5rem; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 1rem; color: var(--paper); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; }
 .cinematic-hero__progress i { height: 1px; overflow: hidden; background: rgba(245, 240, 230, .4); }
 .cinematic-hero__progress b { display: block; width: calc(var(--hero-progress) * 100%); height: 100%; background: var(--sun); }
@@ -193,6 +195,7 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
   .site-nav.is-open { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .site-nav a { font-size: 1.8rem; text-transform: none; }
   .cinematic-hero { height: 190svh; }
+  .cinematic-hero__video { transform: none; }
   .cinematic-hero__scene h1 { top: 41%; font-size: clamp(4.7rem, 23vw, 7rem); line-height: .78; }
   .cinematic-hero__scene h2 { top: 46%; width: calc(100% - 2rem); font-size: clamp(3.5rem, 17vw, 5.8rem); line-height: .84; }
   .cinematic-hero__date { top: 64%; font-size: .62rem; }
@@ -247,7 +250,6 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .cinematic-hero { height: 100svh; }
-  .cinematic-hero__video { display: none; }
   .cinematic-hero__scene--opening { opacity: 1; transform: none; }
   .reveal { opacity: 1; transform: none; }
   .reveal--wipe::after { display: none; }
