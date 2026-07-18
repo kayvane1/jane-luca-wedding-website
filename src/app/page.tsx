@@ -28,6 +28,23 @@ const faqs = [
   ],
 ];
 
+type SketchCardProps = {
+  alt: string;
+  caption?: string;
+  className: string;
+  sizes: string;
+  src: string;
+};
+
+function SketchCard({ alt, caption, className, sizes, src }: SketchCardProps) {
+  return (
+    <figure className={`sketch-card ${className}`}>
+      <Image src={src} fill sizes={sizes} alt={alt} />
+      {caption ? <figcaption>{caption}</figcaption> : null}
+    </figure>
+  );
+}
+
 export default function Home() {
   return (
     <main>
@@ -39,9 +56,23 @@ export default function Home() {
           <p className="eyebrow">The weekend</p>
           <h2>Come for the wedding.<br /><em>Stay for the island.</em></h2>
           <p>Plans worth looking forward to, with plenty of room left for long lunches and accidental swims.</p>
+          <SketchCard
+            className="section-intro__sketch"
+            src="/assets/sketches/champagne-coupes-sketch.jpg"
+            sizes="(max-width: 820px) 62vw, 27vw"
+            alt="A pencil drawing of two champagne coupes"
+            caption="to the weekend"
+          />
         </header>
 
         <article className="info-panel info-panel--program">
+          <SketchCard
+            className="programme-sketch"
+            src="/assets/sketches/corsica-tower-sketch.jpg"
+            sizes="(max-width: 820px) 76vw, 32vw"
+            alt="A pencil drawing of a stone watchtower on the Corsican coast"
+            caption="island time"
+          />
           <Reveal variant="slide-left" className="info-panel__aside">
             <span className="section-number">01 / 04</span>
             <p className="eyebrow">Programme</p>
@@ -73,6 +104,13 @@ export default function Home() {
             <span className="section-number">02 / 04</span>
             <p className="eyebrow">Where to stay</p>
             <h3>Check in.<br /><em>Then exhale.</em></h3>
+            <SketchCard
+              className="stay-sketch"
+              src="/assets/sketches/mediterranean-villa-sketch.jpg"
+              sizes="(max-width: 820px) 80vw, 32vw"
+              alt="A pencil drawing of a Mediterranean villa and pool"
+              caption="somewhere to disappear for an afternoon"
+            />
             <div className="editorial-columns">
               <p>Lumio, Calvi and L’Île-Rousse place you close to the celebrations and the best of the Balagne coast.</p>
               <p>Choose a small hotel, share a villa or find an apartment with a balcony. Our considered shortlist is coming with the invitations.</p>
@@ -88,6 +126,13 @@ export default function Home() {
           </Reveal>
           <Reveal variant="slide-right" className="info-panel__main">
             <h3>Windows down.<br /><em>Coast ahead.</em></h3>
+            <SketchCard
+              className="transport-sketch"
+              src="/assets/sketches/palm-frond-sketch.jpg"
+              sizes="(max-width: 820px) 72vw, 28vw"
+              alt="A pencil drawing of a palm frond against distant mountains"
+              caption="follow the coast"
+            />
             <div className="editorial-columns">
               <p>Calvi–Sainte-Catherine is the closest airport and the gateway to the Balagne. Bastia is the useful alternative when its schedules suit you better.</p>
               <p>A hire car is the simplest way to reach Lumio, Palasca and the villages in between. Wedding-day transport details will follow.</p>
@@ -101,6 +146,13 @@ export default function Home() {
             <span className="section-number">04 / 04</span>
             <p className="eyebrow">The mood</p>
             <h3>Mediterranean evening,<br /><em>dressed with joy.</em></h3>
+            <SketchCard
+              className="theme-sketch"
+              src="/assets/sketches/olive-tree-coast-sketch.jpg"
+              sizes="(max-width: 820px) 86vw, 55vw"
+              alt="A pencil drawing of an olive tree beside the Corsican sea"
+              caption="under the olives, after the sun"
+            />
             <p className="theme-copy">Summer formal, never stiff: light tailoring, long dresses, colour, beautiful shoes you can still dance in, and whatever makes you feel most like yourself.</p>
           </Reveal>
         </article>
@@ -132,11 +184,18 @@ export default function Home() {
 
       <section className="story" id="story">
         <Reveal className="story__visual" variant="slide-left">
-          <Image
-            src="/assets/corsica-shore-editorial.png"
-            fill
-            sizes="(max-width: 820px) 88vw, 40vw"
-            alt="A quiet figure looking over the calm Corsican sea"
+          <SketchCard
+            className="story-sketch story-sketch--olive"
+            src="/assets/sketches/olive-tree-coast-sketch.jpg"
+            sizes="(max-width: 820px) 80vw, 36vw"
+            alt="A pencil drawing of an old olive tree facing the sea"
+          />
+          <SketchCard
+            className="story-sketch story-sketch--tower"
+            src="/assets/sketches/corsica-tower-sketch.jpg"
+            sizes="(max-width: 820px) 48vw, 18vw"
+            alt="A pencil drawing of a Corsican stone tower by the sea"
+            caption="the rock, the sea, the two of us"
           />
           <span className="handwritten">and then there were two</span>
         </Reveal>
