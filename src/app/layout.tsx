@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Jane & Luca — A Wedding in Corsica",
-  description: "Join Jane and Luca for a Mediterranean wedding weekend in Corsica.",
+  description: "Join Jane and Luca for a Mediterranean wedding weekend in Corsica on 10 July 2027.",
   icons: { icon: "/assets/jl-monogram.png" },
 };
 

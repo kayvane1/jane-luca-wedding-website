@@ -256,6 +256,7 @@ export function CinematicHero() {
 
         <div className="cinematic-hero__scene cinematic-hero__scene--invitation">
           <h2>Come celebrate<br /><i>with us in Corsica</i></h2>
+          <p className="cinematic-hero__date">10 July 2027</p>
         </div>
 
         <div className="cinematic-hero__progress" aria-hidden="true">

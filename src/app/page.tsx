@@ -78,17 +78,17 @@ export default function Home() {
             <h3>Three days,<br />one island,<br /><em>no rush.</em></h3>
             <div className="event-list">
               <div className="event-line">
-                <p><span>Friday</span>Welcome aperitivo</p>
+                <p><span>Friday · 9 July</span>Welcome aperitivo</p>
                 <address>Licciola<br />Route de Bastia, Lieu Dit Licciola<br />20226 Palasca, France</address>
                 <a href="https://www.google.com/maps/search/?api=1&query=Licciola%2C+Route+de+Bastia%2C+Lieu+Dit+Licciola%2C+20226+Palasca%2C+France" target="_blank" rel="noreferrer">Open map ↗</a>
               </div>
               <div className="event-line">
-                <p><span>Saturday</span>The wedding</p>
+                <p><span>Saturday · 10 July 2027</span>The wedding</p>
                 <address>Le Rocher<br />Lumio, Corsica</address>
                 <a href="https://www.google.com/maps/search/?api=1&query=Le+Rocher%2C+Lumio%2C+Corsica" target="_blank" rel="noreferrer">Open map ↗</a>
               </div>
               <div className="event-line">
-                <p><span>Sunday</span>A slow goodbye</p>
+                <p><span>Sunday · 11 July</span>A slow goodbye</p>
                 <address>Details to follow<br />with your invitation</address>
               </div>
             </div>
@@ -219,7 +219,7 @@ export default function Home() {
         <p className="eyebrow">Jane &amp; Luca</p>
         <h2>À bientôt<br /><em>in Corsica.</em></h2>
         <div className="footer__bottom">
-          <p>Le Rocher — Lumio</p>
+          <p>10 July 2027 — Le Rocher, Lumio</p>
           <span className="playlist-placeholder">Spotify playlist coming soon ♫</span>
           <a href="#home">Back to top ↑</a>
         </div>

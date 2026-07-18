@@ -3,9 +3,9 @@
 import { type FormEvent, useState } from "react";
 
 const eventOptions = [
-  { name: "fridayAttendance", day: "Friday", detail: "Welcome aperitivo" },
-  { name: "saturdayAttendance", day: "Saturday", detail: "Ceremony & dinner" },
-  { name: "sundayAttendance", day: "Sunday", detail: "Beach recovery" },
+  { name: "fridayAttendance", day: "Friday", detail: "9 July · Welcome aperitivo" },
+  { name: "saturdayAttendance", day: "Saturday", detail: "10 July · Ceremony & dinner" },
+  { name: "sundayAttendance", day: "Sunday", detail: "11 July · Beach recovery" },
 ] as const;
 
 export function RsvpForm() {

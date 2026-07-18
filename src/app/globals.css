@@ -52,6 +52,7 @@ address { font-style: normal; }
 .cinematic-hero__scene h1 i { color: var(--sun); font-weight: 400; }
 .cinematic-hero__scene h2 { top: 48%; width: min(92vw, 80rem); font-size: clamp(4.5rem, 9vw, 9.5rem); line-height: .8; }
 .cinematic-hero__scene h2 i { color: var(--sun); font-weight: 400; }
+.cinematic-hero__date { position: absolute; top: 70%; left: 50%; margin: 0; color: var(--paper-light); font-size: clamp(.68rem, 1vw, .82rem); letter-spacing: .18em; text-transform: uppercase; transform: translateX(-50%); }
 .cinematic-hero__scene--opening { opacity: clamp(0, calc(1.4 - var(--hero-progress) * 3.4), 1); transform: translateY(calc(var(--hero-progress) * -6rem)); }
 .cinematic-hero__scene--invitation { opacity: clamp(0, calc((var(--hero-progress) - .12) * 3.4), 1); transform: translateY(calc((1 - var(--hero-progress)) * 5rem)); }
 .cinematic-hero__progress { position: absolute; z-index: 3; inset: auto 5vw 1.5rem; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 1rem; color: var(--paper); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; }
@@ -198,6 +199,7 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
   .cinematic-hero { height: 190svh; }
   .cinematic-hero__scene h1 { top: 41%; font-size: clamp(4.7rem, 23vw, 7rem); line-height: .78; }
   .cinematic-hero__scene h2 { top: 46%; width: calc(100% - 2rem); font-size: clamp(3.5rem, 17vw, 5.8rem); line-height: .84; }
+  .cinematic-hero__date { top: 64%; font-size: .62rem; }
   .cinematic-hero__progress { inset: auto 1.5rem 1.5rem; }
   .section-intro, .info-panel, .rsvp-section, .story, .faq { padding: 7rem 1.5rem; grid-template-columns: 1fr; gap: 4rem; }
   .section-intro { min-height: 86vh; }
