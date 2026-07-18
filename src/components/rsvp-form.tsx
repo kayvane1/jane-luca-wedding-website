@@ -49,12 +49,12 @@ export function RsvpForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const result = (await response.json()) as { error?: string };
+      const result = (await response.json()) as { error?: string; message?: string };
 
       if (!response.ok) throw new Error(result.error || "Your RSVP could not be saved.");
 
       setStatus("success");
-      setMessage("Grazie — your RSVP is safely in our guest book.");
+      setMessage(result.message || "Grazie — your RSVP is safely in our guest book.");
       form.reset();
       setGuestCount(1);
       setAttendingAny(false);

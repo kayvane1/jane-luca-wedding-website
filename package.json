@@ -16,6 +16,7 @@
     "db:check": "drizzle-kit check",
     "db:migrate": "drizzle-kit migrate",
     "db:test": "tsx scripts/db-smoke-test.ts",
+    "db:battle-test": "tsx scripts/rsvp-battle-test.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
