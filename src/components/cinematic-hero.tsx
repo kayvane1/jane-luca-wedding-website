@@ -135,7 +135,6 @@ export function CinematicHero() {
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
       const progress = Math.min(1, Math.max(0, -bounds.top / travel));
       section.style.setProperty("--hero-progress", progress.toFixed(4));
-      section.dataset.scene = progress < 0.46 ? "opening" : "rocher";
     };
 
     const queueProgressUpdate = () => {
@@ -247,18 +246,11 @@ export function CinematicHero() {
         </div>
 
         <div className="cinematic-hero__scene cinematic-hero__scene--opening">
-          <p>A weekend in the Balagne</p>
           <h1>Jane <i>&amp;</i> Luca</h1>
-        </div>
-
-        <div className="cinematic-hero__scene cinematic-hero__scene--rocher" aria-hidden="true">
-          <p>Scene two · the island</p>
-          <h2>Meet us<br />by <i>the rock.</i></h2>
-          <span className="cinematic-hero__aside">Three days by the sea / one very good reason to come</span>
+          <p>Come celebrate with us in Corsica</p>
         </div>
 
         <div className="cinematic-hero__progress" aria-hidden="true">
-          <span>J&amp;L / Corsica</span>
           <i><b /></i>
           <span>Scroll to enter</span>
         </div>
