@@ -88,7 +88,7 @@ export function RsvpForm() {
           <label className="event-card" key={name}>
             <input type="checkbox" name={name} />
             <span className="event-card__check" aria-hidden="true">✓</span>
-            <span><strong>{day}</strong><small>{detail}</small></span>
+            <span className="event-card__copy"><strong>{day}</strong><small>{detail}</small></span>
           </label>
         ))}
       </fieldset>

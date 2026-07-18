@@ -117,9 +117,10 @@ h2 em, h3 em { color: var(--accent); font-weight: 400; }
 .event-choices legend { margin-bottom: 1rem; }
 .event-card { position: relative; grid-template-columns: auto auto 1fr; align-items: center; padding: 1.1rem; border: 1px solid var(--accent); cursor: pointer; }
 .event-card input { position: absolute; opacity: 0; pointer-events: none; }
-.event-card__check { width: 1.8rem; height: 1.8rem; display: grid; place-items: center; border: 1px solid var(--accent); color: transparent; transition: background 180ms var(--ease-out), color 180ms var(--ease-out); }
+.rsvp-form .event-card__check { width: 1.8rem; height: 1.8rem; display: grid; place-items: center; border: 1px solid var(--accent); color: transparent; transition: background 180ms var(--ease-out), color 180ms var(--ease-out); }
 .event-card:has(input:checked) { color: var(--paper); background: var(--accent); }
-.event-card input:checked + .event-card__check { color: var(--accent); background: var(--paper); }
+.rsvp-form .event-card:has(input:checked) .event-card__copy { color: var(--paper); }
+.rsvp-form .event-card input:checked + .event-card__check { color: var(--accent); background: var(--paper); }
 .event-card strong { display: block; font-family: var(--display); font-size: 1.45rem; font-weight: 400; text-transform: none; }
 .event-card small { display: block; margin-top: .2rem; font-size: .64rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
 .attending-details { animation: details-in 480ms var(--ease-out) both; }

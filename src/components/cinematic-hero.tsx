@@ -83,6 +83,7 @@ export function CinematicHero() {
     let loopTimer = 0;
     let player: YouTubePlayer | null = null;
     let playerApi: YouTubeApi | null = null;
+    let playerReady = false;
     let disposed = false;
     let heroVisible = section.getBoundingClientRect().bottom > 0;
     let segmentLoops = 0;
@@ -90,7 +91,7 @@ export function CinematicHero() {
     section.dataset.segmentLoops = "0";
 
     const loadSegment = (shouldPlay = true) => {
-      if (!player) return;
+      if (!player || !playerReady) return;
 
       if (shouldPlay && heroVisible && !reducedMotion.matches) {
         player.loadVideoById(LUMIO_VIDEO_ID, SEGMENT_START);
@@ -101,19 +102,20 @@ export function CinematicHero() {
     };
 
     const restartSegment = () => {
+      if (!player || !playerReady) return;
       segmentLoops += 1;
       section.dataset.segmentLoops = String(segmentLoops);
       section.dataset.videoTime = SEGMENT_START.toFixed(2);
-      player?.seekTo(SEGMENT_START, true);
+      player.seekTo(SEGMENT_START, true);
       if (heroVisible && !reducedMotion.matches) {
-        player?.playVideo();
+        player.playVideo();
       } else {
-        player?.pauseVideo();
+        player.pauseVideo();
       }
     };
 
     const enforceSegment = () => {
-      if (!player || !playerApi || reducedMotion.matches || !heroVisible) return;
+      if (!player || !playerApi || !playerReady || reducedMotion.matches || !heroVisible) return;
       if (player.getPlayerState() !== playerApi.PlayerState.PLAYING) return;
 
       const currentTime = player.getCurrentTime();
@@ -144,7 +146,7 @@ export function CinematicHero() {
     const visibilityObserver = new IntersectionObserver(([entry]) => {
       heroVisible = entry.isIntersecting;
 
-      if (!player) return;
+      if (!player || !playerReady) return;
       if (reducedMotion.matches || !heroVisible) {
         player.pauseVideo();
       } else {
@@ -158,7 +160,7 @@ export function CinematicHero() {
     }, { threshold: 0.05 });
 
     const handleMotionPreference = () => {
-      if (!player) return;
+      if (!player || !playerReady) return;
       if (reducedMotion.matches) {
         player.pauseVideo();
       } else if (heroVisible) {
@@ -193,12 +195,14 @@ export function CinematicHero() {
         events: {
           onReady: (event) => {
             player = event.target;
+            playerReady = true;
             player.mute();
             loadSegment();
             loopTimer = window.setInterval(enforceSegment, 150);
           },
           onStateChange: (event) => {
             player = event.target;
+            if (disposed || !playerReady) return;
             if (event.data === api.PlayerState.PLAYING) {
               const currentTime = player.getCurrentTime();
               section.dataset.videoTime = currentTime.toFixed(2);
@@ -225,13 +229,14 @@ export function CinematicHero() {
 
     return () => {
       disposed = true;
+      playerReady = false;
       window.cancelAnimationFrame(animationFrame);
       window.clearInterval(loopTimer);
       visibilityObserver.disconnect();
       window.removeEventListener("scroll", queueProgressUpdate);
       window.removeEventListener("resize", queueProgressUpdate);
       reducedMotion.removeEventListener("change", handleMotionPreference);
-      player?.destroy();
+      if (typeof player?.destroy === "function") player.destroy();
     };
   }, []);
 
