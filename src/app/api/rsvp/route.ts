@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getDatabase } from "@/db/client";
-import { rsvps } from "@/db/schema";
 import { validateRsvpInput } from "@/lib/rsvp";
+import { saveRsvp } from "@/lib/rsvp-store";
 
 export const runtime = "nodejs";
 
@@ -21,12 +20,15 @@ export async function POST(request: Request) {
   }
 
   try {
-    const [created] = await getDatabase()
-      .insert(rsvps)
-      .values(result.data)
-      .returning({ id: rsvps.id });
+    const saved = await saveRsvp(result.data);
+    if (!saved.ok) {
+      return NextResponse.json(
+        { error: saved.message, action: saved.action },
+        { status: 409 },
+      );
+    }
 
-    return NextResponse.json({ ok: true, id: created.id }, { status: 201 });
+    return NextResponse.json(saved, { status: saved.action === "created" ? 201 : 200 });
   } catch (error) {
     console.error("RSVP submission failed", error);
     return NextResponse.json(

@@ -9,6 +9,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -48,6 +49,12 @@ export const rsvps = pgTable(
     ),
     index("rsvps_invitation_code_idx").on(table.invitationCode),
     index("rsvps_submitted_at_idx").on(table.submittedAt),
+    uniqueIndex("rsvps_primary_guest_name_unique").on(
+      sql`lower(${table.primaryGuestName})`,
+    ),
+    uniqueIndex("rsvps_email_unique")
+      .on(sql`lower(${table.email})`)
+      .where(sql`${table.email} is not null`),
   ],
 );
 

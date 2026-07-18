@@ -31,19 +31,21 @@ export function validateRsvpInput(value: unknown): RsvpValidationResult {
 
   const input = value as Record<string, unknown>;
   const primaryGuestName = cleanText(input.primaryGuestName, 120);
-  const email = cleanText(input.email, 320) || null;
+  const email = cleanText(input.email, 320).toLowerCase() || null;
   const fridayAttendance = input.fridayAttendance === true;
   const saturdayAttendance = input.saturdayAttendance === true;
   const sundayAttendance = input.sundayAttendance === true;
   const isAttending = fridayAttendance || saturdayAttendance || sundayAttendance;
   const rawGuestCount = Number(input.guestCount);
   const guestCount = isAttending && Number.isInteger(rawGuestCount) ? rawGuestCount : 0;
-  const guestNames = Array.isArray(input.guestNames)
+  const submittedGuestNames = Array.isArray(input.guestNames)
     ? input.guestNames.map((name) => cleanText(name, 120)).filter(Boolean).slice(0, 9)
     : [];
-  const menuChoice = menuChoices.includes(input.menuChoice as (typeof menuChoices)[number])
+  const submittedMenuChoice = menuChoices.includes(input.menuChoice as (typeof menuChoices)[number])
     ? (input.menuChoice as (typeof menuChoices)[number])
     : null;
+  const guestNames = isAttending ? submittedGuestNames : [];
+  const menuChoice = isAttending ? submittedMenuChoice : null;
   const dietaryRequirements = cleanText(input.dietaryRequirements, 1000) || null;
   const message = cleanText(input.message, 2000) || null;
 
