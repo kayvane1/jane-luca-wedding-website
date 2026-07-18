@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const LUMIO_VIDEO_ID = "lvukW3m28qA";
-const SEGMENT_START = 5;
+const SEGMENT_START = 6;
 const SEGMENT_END = 30;
 
 interface YouTubePlayer {
@@ -15,7 +15,6 @@ interface YouTubePlayer {
   mute(): void;
   pauseVideo(): void;
   playVideo(): void;
-  seekTo(seconds: number, allowSeekAhead: boolean): void;
 }
 
 interface YouTubeApi {
@@ -85,6 +84,9 @@ export function CinematicHero() {
     let playerApi: YouTubeApi | null = null;
     let disposed = false;
     let heroVisible = section.getBoundingClientRect().bottom > 0;
+    let segmentLoops = 0;
+
+    section.dataset.segmentLoops = "0";
 
     const loadSegment = (shouldPlay = true) => {
       if (!player) return;
@@ -103,14 +105,23 @@ export function CinematicHero() {
       }
     };
 
+    const restartSegment = () => {
+      segmentLoops += 1;
+      section.dataset.segmentLoops = String(segmentLoops);
+      loadSegment();
+    };
+
     const enforceSegment = () => {
       if (!player || !playerApi || reducedMotion.matches || !heroVisible) return;
       if (player.getPlayerState() !== playerApi.PlayerState.PLAYING) return;
 
       const currentTime = player.getCurrentTime();
-      if (currentTime < SEGMENT_START - 0.2 || currentTime >= SEGMENT_END - 0.35) {
-        player.seekTo(SEGMENT_START, true);
-        player.playVideo();
+      section.dataset.videoTime = currentTime.toFixed(2);
+      if (
+        (currentTime > 0.5 && currentTime < SEGMENT_START - 0.2)
+        || currentTime >= SEGMENT_END - 0.75
+      ) {
+        restartSegment();
       }
     };
 
@@ -186,11 +197,16 @@ export function CinematicHero() {
           onStateChange: (event) => {
             player = event.target;
             if (event.data === api.PlayerState.PLAYING) {
+              const currentTime = player.getCurrentTime();
+              section.dataset.videoTime = currentTime.toFixed(2);
+              if (currentTime < SEGMENT_START - 0.2 || currentTime >= SEGMENT_END - 0.75) {
+                restartSegment();
+                return;
+              }
               section.querySelector(".cinematic-hero__film")?.setAttribute("data-youtube-ready", "true");
               enforceSegment();
             } else if (event.data === api.PlayerState.ENDED) {
-              player.seekTo(SEGMENT_START, true);
-              if (heroVisible && !reducedMotion.matches) player.playVideo();
+              restartSegment();
             }
           },
         },
