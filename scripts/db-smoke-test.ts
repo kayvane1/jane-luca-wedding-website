@@ -15,8 +15,10 @@ try {
     .values({
       primaryGuestName: "Database smoke test",
       attendance: "attending",
+      fridayAttendance: true,
       guestCount: 1,
-      guestNames: ["Database smoke test"],
+      guestNames: [],
+      menuChoice: "Vegetarian",
     })
     .returning({ id: rsvps.id });
 

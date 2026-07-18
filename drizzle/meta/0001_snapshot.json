@@ -1,0 +1,175 @@
+{
+  "id": "9841e37b-4c1b-4460-9878-b3e51e2db21b",
+  "prevId": "9ad9a8e0-cc82-475e-887a-8fe43c896bca",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.rsvps": {
+      "name": "rsvps",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "invitation_code": {
+          "name": "invitation_code",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "primary_guest_name": {
+          "name": "primary_guest_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(320)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "attendance": {
+          "name": "attendance",
+          "type": "rsvp_attendance",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "friday_attendance": {
+          "name": "friday_attendance",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "saturday_attendance": {
+          "name": "saturday_attendance",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "sunday_attendance": {
+          "name": "sunday_attendance",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "guest_count": {
+          "name": "guest_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "guest_names": {
+          "name": "guest_names",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "menu_choice": {
+          "name": "menu_choice",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dietary_requirements": {
+          "name": "dietary_requirements",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "rsvps_invitation_code_idx": {
+          "name": "rsvps_invitation_code_idx",
+          "columns": [
+            {
+              "expression": "invitation_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "rsvps_submitted_at_idx": {
+          "name": "rsvps_submitted_at_idx",
+          "columns": [
+            {
+              "expression": "submitted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "rsvps_attendance_guest_count_check": {
+          "name": "rsvps_attendance_guest_count_check",
+          "value": "(\"rsvps\".\"attendance\" = 'attending' and \"rsvps\".\"guest_count\" between 1 and 10 and (\"rsvps\".\"friday_attendance\" or \"rsvps\".\"saturday_attendance\" or \"rsvps\".\"sunday_attendance\")) or (\"rsvps\".\"attendance\" = 'declined' and \"rsvps\".\"guest_count\" = 0 and not \"rsvps\".\"friday_attendance\" and not \"rsvps\".\"saturday_attendance\" and not \"rsvps\".\"sunday_attendance\")"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.rsvp_attendance": {
+      "name": "rsvp_attendance",
+      "schema": "public",
+      "values": [
+        "attending",
+        "declined"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
