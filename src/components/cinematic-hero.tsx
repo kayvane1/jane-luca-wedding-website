@@ -79,6 +79,7 @@ export function CinematicHero() {
             loop
             playsInline
             preload="auto"
+            poster="/assets/lumio-drone-first-frame.jpg"
             tabIndex={-1}
             onLoadedData={(event) => {
               event.currentTarget.parentElement?.setAttribute("data-video-ready", "true");
