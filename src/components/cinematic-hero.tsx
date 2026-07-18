@@ -6,16 +6,38 @@ const LUMIO_CLIP = "/assets/lumio-drone-6-30.mp4";
 
 export function CinematicHero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
+  const openingRef = useRef<HTMLDivElement>(null);
+  const invitationRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLElement>(null);
   const [playbackBlocked, setPlaybackBlocked] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
+    const stage = stageRef.current;
     const video = videoRef.current;
+    const light = lightRef.current;
+    const opening = openingRef.current;
+    const invitation = invitationRef.current;
+    const progressIndicator = progressRef.current;
+    const progressBar = progressBarRef.current;
 
-    if (!section || !video) return;
+    if (
+      !section
+      || !stage
+      || !video
+      || !light
+      || !opening
+      || !invitation
+      || !progressIndicator
+      || !progressBar
+    ) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktopHero = window.matchMedia("(min-width: 821px)");
     let animationFrame = 0;
 
     const markVideoReady = () => {
@@ -36,9 +58,28 @@ export function CinematicHero() {
     const updateProgress = () => {
       animationFrame = 0;
       const bounds = section.getBoundingClientRect();
-      const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
+      // `innerHeight` changes as mobile browser chrome collapses. The sticky
+      // stage uses `svh`, so measure against that stable element instead.
+      const travel = Math.max(section.offsetHeight - stage.offsetHeight, 1);
       const progress = Math.min(1, Math.max(0, -bounds.top / travel));
-      section.style.setProperty("--hero-progress", progress.toFixed(4));
+      const openingExit = Math.min(1, Math.max(0, (progress - 0.08) / 0.28));
+      const invitationEnter = Math.min(1, Math.max(0, (progress - 0.24) / 0.28));
+      const invitationEase = 1 - Math.pow(1 - invitationEnter, 3);
+      const promptExit = Math.min(1, Math.max(0, (progress - 0.84) / 0.16));
+
+      opening.style.opacity = (1 - openingExit).toFixed(4);
+      opening.style.transform = `translate3d(0, ${(-3.5 * openingExit).toFixed(3)}rem, 0)`;
+      invitation.style.opacity = invitationEnter.toFixed(4);
+      invitation.style.transform = `translate3d(0, ${((1 - invitationEase) * 3.5).toFixed(3)}rem, 0)`;
+      light.style.transform = `translate3d(${((progress - 0.5) * 42).toFixed(3)}vw, 0, 0)`;
+      progressBar.style.transform = `scaleX(${progress.toFixed(4)})`;
+      progressIndicator.style.opacity = (1 - promptExit).toFixed(4);
+
+      if (desktopHero.matches) {
+        video.style.transform = `scale(${(1.015 + progress * 0.07).toFixed(4)})`;
+      } else {
+        video.style.transform = "none";
+      }
     };
 
     const queueProgressUpdate = () => {
@@ -48,7 +89,7 @@ export function CinematicHero() {
     const visibilityObserver = new IntersectionObserver(([entry]) => {
       if (reducedMotion.matches || !entry.isIntersecting) {
         video.pause();
-        if (reducedMotion.matches) setPlaybackBlocked(true);
+        if (reducedMotion.matches) setPlaybackBlocked(false);
       } else {
         startVideo();
       }
@@ -57,7 +98,7 @@ export function CinematicHero() {
     const handleMotionPreference = () => {
       if (reducedMotion.matches) {
         video.pause();
-        setPlaybackBlocked(true);
+        setPlaybackBlocked(false);
       } else if (section.getBoundingClientRect().bottom > 0) {
         startVideo();
       }
@@ -82,6 +123,7 @@ export function CinematicHero() {
     window.addEventListener("pointerdown", handleFirstGesture, { passive: true });
     window.addEventListener("scroll", queueProgressUpdate, { passive: true });
     window.addEventListener("resize", queueProgressUpdate);
+    desktopHero.addEventListener("change", queueProgressUpdate);
     reducedMotion.addEventListener("change", handleMotionPreference);
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) markVideoReady();
     updateProgress();
@@ -94,13 +136,14 @@ export function CinematicHero() {
       window.removeEventListener("pointerdown", handleFirstGesture);
       window.removeEventListener("scroll", queueProgressUpdate);
       window.removeEventListener("resize", queueProgressUpdate);
+      desktopHero.removeEventListener("change", queueProgressUpdate);
       reducedMotion.removeEventListener("change", handleMotionPreference);
     };
   }, []);
 
   return (
     <section className="cinematic-hero" id="home" ref={sectionRef}>
-      <div className="cinematic-hero__stage">
+      <div className="cinematic-hero__stage" ref={stageRef}>
         <div className="cinematic-hero__film" aria-hidden="true">
           <video
             ref={videoRef}
@@ -112,20 +155,24 @@ export function CinematicHero() {
             preload="auto"
             poster="/assets/lumio-drone-first-frame.jpg"
             tabIndex={-1}
-            onLoadedData={(event) => {
-              event.currentTarget.parentElement?.setAttribute("data-video-ready", "true");
-            }}
           >
             <source src={LUMIO_CLIP} type="video/mp4" />
           </video>
           <div className="cinematic-hero__grade" />
+          <div className="cinematic-hero__light" ref={lightRef} />
         </div>
 
-        <div className="cinematic-hero__scene cinematic-hero__scene--opening">
+        <div
+          className="cinematic-hero__scene cinematic-hero__scene--opening"
+          ref={openingRef}
+        >
           <h1>Jane <i>&amp;</i> Luca</h1>
         </div>
 
-        <div className="cinematic-hero__scene cinematic-hero__scene--invitation">
+        <div
+          className="cinematic-hero__scene cinematic-hero__scene--invitation"
+          ref={invitationRef}
+        >
           <h2>Come celebrate<br /><i>with us in Corsica</i></h2>
           <p className="cinematic-hero__date">10 July 2027</p>
         </div>
@@ -148,8 +195,8 @@ export function CinematicHero() {
           </button>
         )}
 
-        <div className="cinematic-hero__progress" aria-hidden="true">
-          <i><b /></i>
+        <div className="cinematic-hero__progress" aria-hidden="true" ref={progressRef}>
+          <i><b ref={progressBarRef} /></i>
           <span>Scroll to enter</span>
         </div>
       </div>
