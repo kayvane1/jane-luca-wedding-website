@@ -252,7 +252,10 @@ export function CinematicHero() {
 
         <div className="cinematic-hero__scene cinematic-hero__scene--opening">
           <h1>Jane <i>&amp;</i> Luca</h1>
-          <p>Come celebrate with us in Corsica</p>
+        </div>
+
+        <div className="cinematic-hero__scene cinematic-hero__scene--invitation">
+          <h2>Come celebrate<br /><i>with us in Corsica</i></h2>
         </div>
 
         <div className="cinematic-hero__progress" aria-hidden="true">
