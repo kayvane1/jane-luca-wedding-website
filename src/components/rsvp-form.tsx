@@ -9,7 +9,6 @@ const eventOptions = [
 ] as const;
 
 export function RsvpForm() {
-  const [guestCount, setGuestCount] = useState(1);
   const [attendingAny, setAttendingAny] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -22,6 +21,8 @@ export function RsvpForm() {
     const saturdayAttendance = data.get("saturdayAttendance") === "on";
     const sundayAttendance = data.get("sundayAttendance") === "on";
     const hasEvent = fridayAttendance || saturdayAttendance || sundayAttendance;
+    const personalNote = String(data.get("message") || "").trim();
+    const bestTune = String(data.get("bestTune") || "").trim();
 
     const payload = {
       primaryGuestName: data.get("primaryGuestName"),
@@ -29,15 +30,11 @@ export function RsvpForm() {
       fridayAttendance,
       saturdayAttendance,
       sundayAttendance,
-      guestCount: hasEvent ? Number(data.get("guestCount")) : 0,
-      guestNames: hasEvent
-        ? Array.from({ length: Math.max(0, Number(data.get("guestCount")) - 1) }, (_, index) =>
-            data.get(`guestName-${index}`),
-          )
-        : [],
+      guestCount: hasEvent ? 1 : 0,
+      guestNames: [],
       menuChoice: hasEvent ? data.get("menuChoice") : null,
       dietaryRequirements: data.get("dietaryRequirements"),
-      message: data.get("message"),
+      message: [personalNote, bestTune ? `Best tune: ${bestTune}` : ""].filter(Boolean).join("\n\n"),
     };
 
     setStatus("sending");
@@ -56,7 +53,6 @@ export function RsvpForm() {
       setStatus("success");
       setMessage(result.message || "Grazie — your RSVP is safely in our guest book.");
       form.reset();
-      setGuestCount(1);
       setAttendingAny(false);
     } catch (error) {
       setStatus("error");
@@ -93,49 +89,32 @@ export function RsvpForm() {
         ))}
       </fieldset>
 
-      {attendingAny && (
-        <div className="attending-details">
-          <div className="form-grid">
-            <label>
-              <span>Number in your party</span>
-              <select
-                name="guestCount"
-                value={guestCount}
-                onChange={(event) => setGuestCount(Number(event.target.value))}
-              >
-                {Array.from({ length: 10 }, (_, index) => index + 1).map((count) => (
-                  <option key={count} value={count}>{count}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              <span>Menu preference</span>
-              <select name="menuChoice" defaultValue="" required>
-                <option value="" disabled>Choose one</option>
-                <option>Meat</option>
-                <option>Fish</option>
-                <option>Vegetarian</option>
-                <option>Vegan</option>
-              </select>
-            </label>
-          </div>
-
-          {Array.from({ length: guestCount - 1 }, (_, index) => (
-            <label key={index}>
-              <span>Guest {index + 2} name</span>
-              <input name={`guestName-${index}`} required />
-            </label>
-          ))}
-        </div>
-      )}
+      <fieldset className="menu-choices">
+        <legend>Menu preferences</legend>
+        <label className="menu-card">
+          <input type="radio" name="menuChoice" value="Meat" required={attendingAny} />
+          <span className="menu-card__check" aria-hidden="true">✓</span>
+          <span className="menu-card__copy"><strong>Normal</strong><small>Meat &amp; Fish</small></span>
+        </label>
+        <label className="menu-card">
+          <input type="radio" name="menuChoice" value="Vegetarian" required={attendingAny} />
+          <span className="menu-card__check" aria-hidden="true">✓</span>
+          <span className="menu-card__copy"><strong>Vegetarian</strong><small>Including cheese and dairy</small></span>
+        </label>
+      </fieldset>
 
       <label>
-        <span>Allergies or dietary notes</span>
+        <span>Allergies <em>Optional</em></span>
         <textarea name="dietaryRequirements" rows={3} placeholder="Please tell us anything the kitchen should know." />
       </label>
       <label>
-        <span>A note for Jane &amp; Luca <em>optional</em></span>
+        <span>A note for Jane &amp; Luca <em>Optional</em></span>
         <textarea name="message" rows={3} />
+      </label>
+
+      <label>
+        <span>Add your best tune <em>Optional</em></span>
+        <input name="bestTune" placeholder="Share your best music so we can blast it during our party." />
       </label>
 
       <button className="button button--yellow" type="submit" disabled={status === "sending"}>
