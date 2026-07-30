@@ -80,7 +80,27 @@ export default function InformationPage() {
           </section>
         </ScrollReveal>
 
-        <ScrollReveal><section className="information-copy"><h2 className="type-h2">Transport</h2><h3 className="type-h3">By Air</h3><p className="type-body">Calvi and Bastia are the nearest airports. Direct routes vary by season, so it is worth comparing both before booking.</p><h3 className="type-h3">By Ferry</h3><p className="type-body">Ferries from Genoa or Livorno are a scenic option if you are travelling from Italy or would like to bring a car.</p><h3 className="type-h3">Hiring a Car</h3><p className="type-body">We recommend hiring a car for the freedom to travel between the airport, coast and villages. Return shuttles are planned for the wedding night.</p><h3 className="type-h3">On the Wedding Day</h3><p className="type-body">Public parking is available near the venue. We will share final shuttle details with the full schedule.</p></section></ScrollReveal>
+        <ScrollReveal>
+          <section className="information-copy">
+            <h2 className="type-h2">Transport</h2>
+            <h3 className="type-h3">By Flight</h3>
+            <p className="type-body">
+              The closest airports are Calvi or Bastia. There are plenty of direct options if you travel from France; however, there are fewer options from London, so you might need to get a transfer. If you are travelling from Italy, we recommend travelling by car and ferry—info below!
+            </p>
+            <h3 className="type-h3">By Ferry</h3>
+            <p className="type-body">
+              For people coming from Italy, we recommend the ferry, either from Genoa or Livorno. You can drive your car onto the ferry, which would save you from renting a car in Corsica.
+            </p>
+            <h3 className="type-h3">Hiring a Car</h3>
+            <p className="type-body">
+              We recommend hiring one. It gives you freedom between the airport, coast and villages; plans for transport around the main celebration will follow with the final schedule. You can find plenty of options on Get Around or Turo!
+            </p>
+            <h3 className="type-h3">The Day of the Wedding</h3>
+            <p className="type-body">
+              There is public parking just outside the venue, and we are organising a shuttle that will bring you back to your accommodation from 2am until the end! If you are staying further away than our recommended locations and want to use the shuttle service for the return, let us know.
+            </p>
+          </section>
+        </ScrollReveal>
         <ScrollReveal><section className="theme-block"><h2 className="type-h2">Dress Code</h2><p className="type-body type-intro">Summer formal with Mediterranean colour—elegant, joyful and comfortable enough to dance until sunrise.</p></section></ScrollReveal>
       </section>
     </FigmaPageShell>
