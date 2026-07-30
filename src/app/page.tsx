@@ -34,8 +34,8 @@ export default function Home() {
         <h1 className="type-h1"><span>Come celebrate</span><strong>with us in Corsica</strong></h1>
         <Image
           className="figma-hero__drawing"
-          src="/assets/figma-home/image-1.png"
-          alt="An illustrated couple embracing on the Corsican coast"
+          src="/assets/figma-home/hero-illuminated-path.png"
+          alt="An illuminated path leading towards the Corsican coast"
           width={1456}
           height={1092}
           priority
