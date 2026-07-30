@@ -13,15 +13,15 @@ export default function StoryPage() {
     <FigmaPageShell className="story-page">
       <section className="story-page__content">
         <ScrollReveal>
-          <h1>Our Story</h1>
-          <p>Our story began at a time when we were both building something of our own.</p>
-          <p>
+          <h1 className="type-h1">Our Story</h1>
+          <p className="type-body type-intro">Our story began while we were both building something of our own.</p>
+          <p className="type-body">
             Jane had just launched her fashion business, Ipseity, and was busy
             organising pop-up shops, photoshoots and events. At the same time,
             Luca was starting Yellow Cactus, his equipment rental business for
             shoots, events and productions.
           </p>
-          <p>
+          <p className="type-body">
             While planning one of her events, Jane found herself searching for
             what she described as “a box where you plug in all the cables for the
             speakers.” As luck would have it, Luca knew exactly what she meant
@@ -46,7 +46,7 @@ export default function StoryPage() {
 
         <ScrollReveal>
           <div className="story-page__ending">
-            <p>
+            <p className="type-body">
               Seven years later, that mixer is far from the only thing we’ve
               shared. These years have been packed with emotion and a
               never-ending whirlwind of experiences, each one tying us closer
@@ -57,7 +57,7 @@ export default function StoryPage() {
               House; and endured the eight-month process of buying our
               almost-derelict, fire-damaged flat in London; to name a few.
             </p>
-            <h2>
+            <h2 className="type-h2">
               And that’s only seven years.
               <br />
               Can you imagine what still awaits us?

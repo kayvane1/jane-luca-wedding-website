@@ -31,7 +31,7 @@ export default function Home() {
       <FigmaNavigation />
 
       <section className="figma-hero">
-        <h1><span>Come celebrate</span><strong>with us in Corsica</strong></h1>
+        <h1 className="type-h1"><span>Come celebrate</span><strong>with us in Corsica</strong></h1>
         <Image
           className="figma-hero__drawing"
           src="/assets/figma-home/image-1.png"
@@ -47,10 +47,10 @@ export default function Home() {
       <section className="figma-editorial" id="information">
         <article>
           <div className="figma-photo"><Image src="/assets/figma-home/image-2.jpeg" alt="Corsican beach at dusk" fill sizes="(max-width: 760px) 94vw, 46vw" /></div>
-          <div className="figma-editorial__copy"><h2>Three days, one island,<br />no rush.</h2><p>Plans worth looking forward to, with plenty of room left for long lunches and accidental swims.</p></div>
+          <div className="figma-editorial__copy"><h2 className="type-h2">Three days, one island,<br />no rush.</h2><p className="type-body">A weekend to look forward to, with plenty of room for long lunches, sea swims and time together.</p></div>
         </article>
         <article className="figma-editorial__reverse">
-          <div className="figma-editorial__copy"><h2>Come for the wedding.<br />Stay for the island.</h2><p>Plans worth looking forward to, with plenty of room left for long lunches and accidental swims.</p></div>
+          <div className="figma-editorial__copy"><h2 className="type-h2">Come for the wedding.<br />Stay for the island.</h2><p className="type-body">Make a little holiday of it and discover Corsica at its most relaxed, beautiful and sun-soaked.</p></div>
           <div className="figma-photo"><Image src="/assets/figma-home/image-7.jpeg" alt="Corsican mountains and coast" fill sizes="(max-width: 760px) 94vw, 46vw" /></div>
         </article>
       </section>
@@ -58,13 +58,13 @@ export default function Home() {
 
       <ScrollReveal>
       <section className="figma-programme">
-        <h2>The Programme</h2>
+        <h2 className="type-h2">The Programme</h2>
         <div className="figma-programme__list">
           {events.map((event) => (
             <article key={event.title}>
               <p className="figma-event-date">{event.date}</p>
-              <h3>{event.title}</h3>
-              <p>{event.copy}</p>
+              <h3 className="type-h3">{event.title}</h3>
+              <p className="type-body">{event.copy}</p>
               <span aria-hidden="true">📍</span>
               <address>{event.place}</address>
             </article>

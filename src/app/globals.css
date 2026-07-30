@@ -441,3 +441,55 @@ body:has(.figma-home)::before { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* Shared typography hierarchy */
+.figma-home .type-h1 {
+  color: #265198;
+  font-family: var(--display);
+  font-size: clamp(4.5rem, 7vw, 8rem);
+  font-weight: 400;
+  letter-spacing: -.05em;
+  line-height: .95;
+}
+
+.figma-home .type-h2 {
+  color: #265198;
+  font-family: var(--display);
+  font-size: clamp(3.2rem, 5vw, 5.8rem);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+}
+
+.figma-home .type-h3 {
+  color: #265198;
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 2.6vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -.025em;
+  line-height: 1.1;
+}
+
+.figma-home .type-body {
+  font-family: var(--sans);
+  font-size: clamp(1rem, 1.15vw, 1.2rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+.figma-home .type-intro {
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  line-height: 1.55;
+}
+
+.figma-home .information-event__title {
+  font-size: clamp(2.6rem, 4vw, 4.5rem);
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .figma-home .type-h1 { font-size: clamp(3.8rem, 16vw, 6rem); }
+  .figma-home .type-h2 { font-size: clamp(2.8rem, 12vw, 4.5rem); }
+  .figma-home .type-h3 { font-size: clamp(1.7rem, 8vw, 2.5rem); }
+}

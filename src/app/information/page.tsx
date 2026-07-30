@@ -44,14 +44,14 @@ export default function InformationPage() {
   return (
     <FigmaPageShell className="information-page">
       <section className="inner-content">
-        <h1>The Programme</h1>
+        <h1 className="type-h1">The Programme</h1>
         <div className="information-programme">
           {programme.map(([date, title, copy, place, image]) => (
             <ScrollReveal key={title}>
               <article className="information-event">
                 <p className="figma-event-date">{date}</p>
-                <h2>{title}</h2>
-                <p>{copy}</p>
+                <h2 className="type-h2 information-event__title">{title}</h2>
+                <p className="type-body">{copy}</p>
                 <span aria-hidden="true">📍</span>
                 <address>{place}</address>
                 <div><Image src={image} alt={`${title} in Corsica`} fill sizes="(max-width: 760px) 90vw, 64vw" /></div>
@@ -62,16 +62,16 @@ export default function InformationPage() {
 
         <ScrollReveal>
           <section className="stay-section">
-            <h2>Where to Stay</h2>
-            <p>Lumio, Calvi and L’Île-Rousse all make good bases for the weekend. Here are a few practical starting points.</p>
+            <h2 className="type-h2">Where to Stay</h2>
+            <p className="type-body type-intro">Lumio, Calvi and L’Île-Rousse are all wonderful bases for the weekend. Here are a few places to start your search.</p>
             <div className="stay-list">
               {stays.map((stay) => (
                 <article key={stay.name}>
                   <div className="stay-photo"><Image src={stay.image} alt={`${stay.name} in ${stay.location}`} fill sizes="(max-width: 760px) 90vw, 35vw" /></div>
                   <div>
                     <p className="stay-location">{stay.location}</p>
-                    <h3>{stay.name}</h3>
-                    <p>{stay.description}</p>
+                    <h3 className="type-h3">{stay.name}</h3>
+                    <p className="type-body">{stay.description}</p>
                     <a href={stay.href} target="_blank" rel="noreferrer">Visit website ↗</a>
                   </div>
                 </article>
@@ -80,8 +80,8 @@ export default function InformationPage() {
           </section>
         </ScrollReveal>
 
-        <ScrollReveal><section className="information-copy"><h2>Transport</h2><h3>By Flight</h3><p>The closest airports are Calvi and Bastia. Direct services vary by season, so compare both before booking.</p><h3>By Ferry</h3><p>From Italy, ferries from Genoa or Livorno let you bring a car and arrive ready to explore.</p><h3>Hiring a car</h3><p>We recommend hiring one for freedom between the airport, coast and villages. Wedding-night return shuttles are planned.</p><h3>The Day of the Wedding</h3><p>Public parking is available near the venue. Final shuttle information will follow with the schedule.</p></section></ScrollReveal>
-        <ScrollReveal><section className="theme-block"><h2>Theme</h2><p>Summer formal with Mediterranean colour: elegant, joyful, and comfortable enough to dance until sunrise.</p></section></ScrollReveal>
+        <ScrollReveal><section className="information-copy"><h2 className="type-h2">Transport</h2><h3 className="type-h3">By Air</h3><p className="type-body">Calvi and Bastia are the nearest airports. Direct routes vary by season, so it is worth comparing both before booking.</p><h3 className="type-h3">By Ferry</h3><p className="type-body">Ferries from Genoa or Livorno are a scenic option if you are travelling from Italy or would like to bring a car.</p><h3 className="type-h3">Hiring a Car</h3><p className="type-body">We recommend hiring a car for the freedom to travel between the airport, coast and villages. Return shuttles are planned for the wedding night.</p><h3 className="type-h3">On the Wedding Day</h3><p className="type-body">Public parking is available near the venue. We will share final shuttle details with the full schedule.</p></section></ScrollReveal>
+        <ScrollReveal><section className="theme-block"><h2 className="type-h2">Dress Code</h2><p className="type-body type-intro">Summer formal with Mediterranean colour—elegant, joyful and comfortable enough to dance until sunrise.</p></section></ScrollReveal>
       </section>
     </FigmaPageShell>
   );

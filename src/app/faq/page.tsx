@@ -11,5 +11,5 @@ const faqs = [
 ] as const;
 
 export default function FaqPage() {
-  return <FigmaPageShell className="faq-page"><section className="faq-page__layout"><h1>Questions,<br />answered.</h1><div className="faq-page__list">{faqs.map(([question, answer], index) => <details key={question} open={index === 1}><summary><span>{String(index + 1).padStart(2, "0")}</span>{question}<i aria-hidden="true">+</i></summary><p>{answer}</p></details>)}</div></section></FigmaPageShell>;
+  return <FigmaPageShell className="faq-page"><section className="faq-page__layout"><h1 className="type-h1">Questions,<br />answered.</h1><div className="faq-page__list">{faqs.map(([question, answer], index) => <details key={question} open={index === 1}><summary><span>{String(index + 1).padStart(2, "0")}</span>{question}<i aria-hidden="true">+</i></summary><p className="type-body">{answer}</p></details>)}</div></section></FigmaPageShell>;
 }
