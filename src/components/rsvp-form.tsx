@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 
 const eventOptions = [
   { name: "fridayAttendance", day: "Friday", detail: "9 July · Welcome aperitivo" },
@@ -21,8 +21,15 @@ export function RsvpForm() {
     const saturdayAttendance = data.get("saturdayAttendance") === "on";
     const sundayAttendance = data.get("sundayAttendance") === "on";
     const hasEvent = fridayAttendance || saturdayAttendance || sundayAttendance;
+    const hasDeclined = data.get("declined") === "on";
     const personalNote = String(data.get("message") || "").trim();
     const bestTune = String(data.get("bestTune") || "").trim();
+
+    if (!hasEvent && !hasDeclined) {
+      setStatus("error");
+      setMessage("Please choose the moments you can join, or select ‘Can’t make it’. ");
+      return;
+    }
 
     const payload = {
       primaryGuestName: data.get("primaryGuestName"),
@@ -60,7 +67,20 @@ export function RsvpForm() {
     }
   }
 
-  function updateAttendance(form: HTMLFormElement) {
+  function updateAttendance(event: ChangeEvent<HTMLFieldSetElement>) {
+    const form = event.currentTarget.form!;
+    const changedInput = event.target;
+    if (!(changedInput instanceof HTMLInputElement)) return;
+    const declinedInput = form.elements.namedItem("declined") as HTMLInputElement;
+
+    if (changedInput.name === "declined" && changedInput.checked) {
+      eventOptions.forEach(({ name }) => {
+        (form.elements.namedItem(name) as HTMLInputElement).checked = false;
+      });
+    } else if (changedInput.checked) {
+      declinedInput.checked = false;
+    }
+
     const data = new FormData(form);
     setAttendingAny(eventOptions.some(({ name }) => data.get(name) === "on"));
   }
@@ -78,7 +98,7 @@ export function RsvpForm() {
         </label>
       </div>
 
-      <fieldset className="event-choices" onChange={(event) => updateAttendance(event.currentTarget.form!)}>
+      <fieldset className="event-choices" onChange={updateAttendance}>
         <legend>Which moments will you join?</legend>
         {eventOptions.map(({ name, day, detail }) => (
           <label className="event-card" key={name}>
@@ -87,6 +107,11 @@ export function RsvpForm() {
             <span className="event-card__copy"><strong>{day}</strong><small>{detail}</small></span>
           </label>
         ))}
+        <label className="event-card event-card--declined">
+          <input type="checkbox" name="declined" />
+          <span className="event-card__check" aria-hidden="true">✓</span>
+          <span className="event-card__copy"><strong>Can’t make it</strong><small>We’ll raise a glass in your direction</small></span>
+        </label>
       </fieldset>
 
       <fieldset className="menu-choices">
@@ -105,11 +130,11 @@ export function RsvpForm() {
 
       <label>
         <span>Allergies <em>Optional</em></span>
-        <textarea name="dietaryRequirements" rows={3} placeholder="Please tell us anything the kitchen should know." />
+        <textarea name="dietaryRequirements" rows={2} placeholder="Please tell us anything the kitchen should know." />
       </label>
       <label>
         <span>A note for Jane &amp; Luca <em>Optional</em></span>
-        <textarea name="message" rows={3} />
+        <textarea name="message" rows={2} />
       </label>
 
       <label>

@@ -34,10 +34,10 @@ export default function Home() {
         <h1 className="type-h1"><span>Come celebrate</span><strong>with us in Corsica</strong></h1>
         <Image
           className="figma-hero__drawing"
-          src="/assets/figma-home/hero-illuminated-path.png"
-          alt="An illuminated path leading towards the Corsican coast"
-          width={1456}
-          height={1092}
+          src="/assets/figma-home/hero-corsica-bay.jpg"
+          alt="A path overlooking the rocky Corsican coast and mountains"
+          width={1080}
+          height={1080}
           priority
         />
         <div className="figma-hero__meta"><span>10TH JULY 2027</span><span>LUMIO, CORSICA</span></div>
@@ -70,7 +70,11 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <p className="figma-more">We’ve added all the info on the following pages:</p>
+        <p className="figma-more">
+          You’ll find everything you need for the weekend in the pages below,
+          including where to stay, how to RSVP, the dress code, registry details,
+          our story, and answers to frequently asked questions.
+        </p>
         <div className="figma-actions">
           <a id="registry" href="/information">Information</a>
           <a id="rsvp" href="/rsvp">RSVP</a>

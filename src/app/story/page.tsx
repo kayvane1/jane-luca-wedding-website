@@ -3,10 +3,16 @@ import Image from "next/image";
 import { FigmaPageShell } from "@/components/figma-page-shell";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
-const storyImages = Array.from(
-  { length: 8 },
-  (_, index) => `/assets/figma-story/display-${index + 1}.jpeg`,
-);
+const storyImages = [
+  "/assets/figma-story/display-1.jpeg",
+  "/assets/figma-story/display-6.jpeg",
+  "/assets/figma-story/display-3.jpeg",
+  "/assets/figma-story/display-4.jpeg",
+  "/assets/figma-story/display-5.jpeg",
+  "/assets/figma-story/display-2.jpeg",
+  "/assets/figma-story/display-7.jpeg",
+  "/assets/figma-story/display-8.jpeg",
+] as const;
 
 export default function StoryPage() {
   return (
@@ -32,7 +38,7 @@ export default function StoryPage() {
         <ScrollReveal>
           <div className="story-grid">
             {storyImages.map((src, index) => (
-              <div key={src}>
+              <div key={`${src}-${index}`}>
                 <Image
                   src={src}
                   alt={`A moment from Jane and Luca’s story ${index + 1}`}
