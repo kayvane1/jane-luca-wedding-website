@@ -432,7 +432,7 @@ body:has(.figma-home)::before { display: none; }
 .faq-page details p { max-width: 44rem; margin: 0 0 2.5rem 4rem; line-height: 1.55; }
 
 @media (max-width: 760px) {
-  .figma-nav { padding: 1.5rem 1.25rem; }
+  .figma-nav { position: sticky; z-index: 100; top: 0; padding: 1.5rem 1.25rem; background: #fffbef; }
   .figma-menu-toggle { position: relative; z-index: 5; width: 2.7rem; height: 2.7rem; padding: .55rem .3rem; display: grid; align-content: center; gap: .35rem; color: #265198; background: transparent; border: 0; }
   .figma-menu-toggle span { display: block; height: 1px; background: currentColor; transition: transform 200ms ease, opacity 200ms ease; }
   .figma-menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(.4rem) rotate(45deg); }
