@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { syncRsvpToGoogleSheet } from "@/lib/google-sheets";
 import { validateRsvpInput } from "@/lib/rsvp";
 import { saveRsvp } from "@/lib/rsvp-store";
 
@@ -27,6 +28,12 @@ export async function POST(request: Request) {
         { status: 409 },
       );
     }
+
+    await syncRsvpToGoogleSheet({
+      id: saved.id,
+      action: saved.action,
+      data: result.data,
+    });
 
     return NextResponse.json(saved, { status: saved.action === "created" ? 201 : 200 });
   } catch (error) {
