@@ -9,18 +9,19 @@ type SheetSyncInput = {
 function separateMessageAndTune(message: string | null) {
   if (!message) return { message: null, bestTune: null };
 
-  const marker = "\n\nBest tune: ";
-  const markerIndex = message.lastIndexOf(marker);
-  if (markerIndex === -1) {
-    if (message.startsWith("Best tune: ")) {
-      return { message: null, bestTune: message.slice("Best tune: ".length).trim() || null };
-    }
-    return { message, bestTune: null };
+  const marker = /(?:^|\s+)Best tune:\s*/gi;
+  let markerMatch: RegExpExecArray | null = null;
+  let nextMatch: RegExpExecArray | null;
+
+  while ((nextMatch = marker.exec(message)) !== null) {
+    markerMatch = nextMatch;
   }
 
+  if (!markerMatch) return { message, bestTune: null };
+
   return {
-    message: message.slice(0, markerIndex).trim() || null,
-    bestTune: message.slice(markerIndex + marker.length).trim() || null,
+    message: message.slice(0, markerMatch.index).trim() || null,
+    bestTune: message.slice(markerMatch.index + markerMatch[0].length).trim() || null,
   };
 }
 
