@@ -1,5 +1,6 @@
 const SHEET_NAME = "RSVP Responses";
 const HEADER_ROW = 4;
+const NOTIFICATION_EMAIL = "liukrossini@gmail.com";
 
 function jsonResponse(payload) {
   return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(
@@ -9,6 +10,36 @@ function jsonResponse(payload) {
 
 function yesNo(value) {
   return value === true ? "Yes" : "No";
+}
+
+function sendRsvpNotification(payload, targetRow) {
+  const attendance = payload.attendance === "attending" ? "Attending" : "Declined";
+  const subject = `Wedding RSVP: ${payload.primaryGuestName || "Guest"} — ${attendance}`;
+  const events = [
+    `Friday: ${yesNo(payload.fridayAttendance)}`,
+    `Saturday: ${yesNo(payload.saturdayAttendance)}`,
+    `Sunday: ${yesNo(payload.sundayAttendance)}`,
+  ].join("\n");
+
+  const body = [
+    "A wedding RSVP has been submitted.",
+    "",
+    `Guest: ${payload.primaryGuestName || "—"}`,
+    `Email: ${payload.email || "—"}`,
+    `Attendance: ${attendance}`,
+    events,
+    `Party size: ${Number(payload.guestCount || 0)}`,
+    `Additional guests: ${Array.isArray(payload.guestNames) && payload.guestNames.length ? payload.guestNames.join(", ") : "—"}`,
+    `Menu: ${payload.menuChoice || "—"}`,
+    `Allergies / dietary notes: ${payload.dietaryRequirements || "—"}`,
+    `Note for Jane & Luca: ${payload.message || "—"}`,
+    `Best tune: ${payload.bestTune || "—"}`,
+    "",
+    `RSVP ID: ${payload.id}`,
+    `Sheet row: ${targetRow}`,
+  ].join("\n");
+
+  MailApp.sendEmail(NOTIFICATION_EMAIL, subject, body);
 }
 
 function doPost(event) {
@@ -55,6 +86,8 @@ function doPost(event) {
       "Synced",
       now,
     ]]);
+
+    sendRsvpNotification(payload, targetRow);
 
     return jsonResponse({ ok: true, row: targetRow });
   } catch (error) {
